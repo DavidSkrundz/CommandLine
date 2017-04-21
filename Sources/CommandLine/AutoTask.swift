@@ -5,15 +5,11 @@
 
 import Foundation
 
-#if os(macOS)
-private typealias Task = Process
-#endif
-
 /// A wrapper for `Task` with auto piping
 public struct AutoTask {
 	public typealias Element = String
 	
-	fileprivate let tasks: [Task]
+	fileprivate let tasks: [Process]
 	fileprivate let pipes: [Pipe]
 	
 	/// - get: Returns the environment variables of the first task
@@ -28,7 +24,7 @@ public struct AutoTask {
 		}
 	}
 	
-	fileprivate init(tasks: [Task], pipes: [Pipe]) {
+	fileprivate init(tasks: [Process], pipes: [Pipe]) {
 		self.tasks = tasks
 		self.pipes = pipes
 	}
@@ -53,8 +49,8 @@ public struct AutoTask {
 		self.pipes = []
 	}
 	
-	fileprivate static func createTask(_ arguments: [String]) -> Task {
-		let task = Task()
+	fileprivate static func createTask(_ arguments: [String]) -> Process {
+		let task = Process()
 		task.launchPath = "/usr/bin/env"
 		task.arguments = arguments
 		return task
