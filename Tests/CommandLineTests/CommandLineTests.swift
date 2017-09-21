@@ -3,8 +3,8 @@
 //  CommandLine
 //
 
-@testable import CommandLine
 import XCTest
+@testable import CommandLine
 
 class CommandLineTests: XCTestCase {
 	func testStringOuput() {
