@@ -16,13 +16,13 @@ let package = Package(
 		.library(
 			name: "CommandLine",
 			type: .dynamic,
-			targets: ["CommandLine"]),
-		],
+			targets: ["CommandLine"])
+	],
 	targets: [
 		.target(
 			name: "CommandLine"),
 		.testTarget(
 			name: "CommandLineTests",
-			dependencies: ["CommandLine"]),
-		]
+			dependencies: ["CommandLine"])
+	]
 )

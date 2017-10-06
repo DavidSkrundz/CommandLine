@@ -3,9 +3,9 @@
 //  CommandLine
 //
 
-@testable import CommandLineTests
 import XCTest
+@testable import CommandLineTests
 
 XCTMain([
-	testCase(CommandLineTests.allTests),
+	testCase(AutoTaskTests.allTests),
 ])
