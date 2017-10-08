@@ -3,6 +3,8 @@
 //  CommandLine
 //
 
+import Foundation
+
 public protocol Output {
-	func receive(_ input: String)
+	func receive(_ data: Data)
 }

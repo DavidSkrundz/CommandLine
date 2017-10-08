@@ -5,10 +5,8 @@
 
 import Foundation
 
-/// A wrapper for `Task` with auto piping
+/// A wrapper for `Process` with automatic simple piping.
 public struct AutoTask {
-	public typealias Element = String
-	
 	fileprivate let tasks: [Process]
 	fileprivate let pipes: [Pipe]
 	
@@ -29,119 +27,57 @@ public struct AutoTask {
 		self.pipes = pipes
 	}
 	
-	public init(_ command: String, _ arguments: String...) {
-		self.tasks = [AutoTask.createTask([command] + arguments)]
+	public init(cmd: String, args: String...) {
+		self.tasks = [
+			AutoTask.createProcess([cmd] + args)
+		]
 		self.pipes = []
 	}
 	
-	public init(_ command: String, arguments: [String]) {
-		self.tasks = [AutoTask.createTask([command] + arguments)]
-		self.pipes = []
+	/// Synchronously run every `Process` in `self`
+	///
+	/// - Returns: The output of the last `Process`.
+	public func run() -> Data {
+		var buffer = Data()
+		self > buffer
+		return buffer
 	}
 	
-	public init(_ command: String) {
-		self.tasks = [AutoTask.createTask(command.components(separatedBy: " "))]
-		self.pipes = []
-	}
-	
-	fileprivate init(arguments: [String]) {
-		self.tasks = [AutoTask.createTask(arguments)]
-		self.pipes = []
-	}
-	
-	fileprivate static func createTask(_ arguments: [String]) -> Process {
-		let task = Process()
-		task.launchPath = "/usr/bin/env"
-		task.arguments = arguments
-		return task
-	}
-	
-	/// Set the environment variable for all tasks
-	public func setEnvironmentVariable(_ name: String, value: String) {
-		let defaultEnvironment = ProcessInfo.processInfo.environment
-		self.tasks.forEach {
-			var environment = $0.environment ?? defaultEnvironment
-			environment[name] = value
-			$0.environment = environment
-		}
+	private static func createProcess(_ arguments: [String]) -> Process {
+		let process = Process()
+		process.launchPath = "/usr/bin/env"
+		process.arguments = arguments
+		return process
 	}
 }
 
 extension AutoTask: ExpressibleByStringLiteral {
 	public init(stringLiteral value: String) {
-		self.tasks = [AutoTask.createTask(value.components(separatedBy: " "))]
-		self.pipes = []
-	}
-	
-	public init(extendedGraphemeClusterLiteral value: Character) {
-		self.tasks = [AutoTask.createTask([String(value)])]
-		self.pipes = []
-	}
-	
-	public init(unicodeScalarLiteral value: UnicodeScalar) {
-		self.tasks = [AutoTask.createTask([String(Character(value))])]
+		self.tasks = [
+			AutoTask.createProcess(value.components(separatedBy: " "))
+		]
 		self.pipes = []
 	}
 }
 
 extension AutoTask: ExpressibleByArrayLiteral {
-	public init(arrayLiteral elements: Element...) {
-		self.tasks = [AutoTask.createTask(elements)]
+	public init(arrayLiteral elements: String...) {
+		self.tasks = [
+			AutoTask.createProcess(elements)
+		]
 		self.pipes = []
 	}
 }
 
-public func |(lhs: AutoTask, rhs: AutoTask) -> AutoTask {
-	let newPipe = Pipe()
-	lhs.tasks.last!.standardOutput = newPipe
-	rhs.tasks.first!.standardInput = newPipe
-	
-	let tasks = lhs.tasks + rhs.tasks
-	let pipes = lhs.pipes + [newPipe] + rhs.pipes
-	return AutoTask(tasks: tasks, pipes: pipes)
-}
-
-public func |(lhs: String, rhs: String) -> AutoTask {
-	return AutoTask(stringLiteral: lhs) | AutoTask(stringLiteral: rhs)
-}
-
-public func |(lhs: [String], rhs: String) -> AutoTask {
-	return AutoTask(arguments: lhs) | AutoTask(stringLiteral: rhs)
-}
-
-public func |(lhs: String, rhs: [String]) -> AutoTask {
-	return AutoTask(stringLiteral: lhs) | AutoTask(arguments: rhs)
-}
-
-public func |(lhs: [String], rhs: [String]) -> AutoTask {
-	return AutoTask(arguments: lhs) | AutoTask(arguments: rhs)
-}
-
-public func >(lhs: AutoTask, rhs: (String) -> ()) {
-	let finalPipe = Pipe()
-	lhs.tasks.last!.standardOutput = finalPipe
-	
+private func >(lhs: AutoTask, rhs: (Data) -> ()) {
+	let pipe = Pipe()
+	lhs.tasks.last!.standardOutput = pipe
 	lhs.tasks.forEach { $0.launch() }
 	
-	var outputBuffer = ""
 	while true {
-		let data = finalPipe.fileHandleForReading.availableData
-		if data.count == 0 { break }
-		
-		let string = String(data: data, encoding: .utf8) ?? ""
-		outputBuffer.append(string)
-		
-		var lines = outputBuffer.components(separatedBy: "\n")
-		outputBuffer = lines.removeLast()
-		lines
-			.map { $0 + "\n" }
-			.forEach(rhs)
-	}
-	
-	let data = finalPipe.fileHandleForReading.readDataToEndOfFile()
-	outputBuffer += String(data: data, encoding: .utf8) ?? ""
-	if outputBuffer.characters.count > 0 {
-		rhs(outputBuffer)
+		let data = pipe.fileHandleForReading.availableData
+		if data.isEmpty { break }
+		rhs(data)
 	}
 }
 
@@ -149,6 +85,32 @@ public func >(lhs: AutoTask, rhs: Output) {
 	lhs > rhs.receive
 }
 
-public func >(lhs: AutoTask, rhs: inout String) {
+public func >(lhs: AutoTask, rhs: inout Data) {
 	lhs > { rhs.append($0) }
+}
+
+public func >(lhs: AutoTask, rhs: inout String) {
+	lhs > { rhs.append(String(data: $0, encoding: .utf8) ?? "") }
+}
+
+public func |(lhs: AutoTask, rhs: AutoTask) -> AutoTask {
+	let newPipe = Pipe()
+	lhs.tasks.last!.standardOutput = newPipe
+	rhs.tasks.first?.standardInput = newPipe
+	
+	let tasks = lhs.tasks + rhs.tasks
+	let pipes = lhs.pipes + rhs.pipes
+	return AutoTask(tasks: tasks, pipes: pipes)
+}
+
+public func |(lhs: AutoTask, rhs: String) -> AutoTask {
+	return lhs | AutoTask(stringLiteral: rhs)
+}
+
+public func |(lhs: String, rhs: AutoTask) -> AutoTask {
+	return AutoTask(stringLiteral: lhs) | rhs
+}
+
+public func |(lhs: String, rhs: String) -> AutoTask {
+	return AutoTask(stringLiteral: lhs) | AutoTask(stringLiteral: rhs)
 }

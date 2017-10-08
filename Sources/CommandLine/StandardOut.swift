@@ -3,9 +3,12 @@
 //  CommandLine
 //
 
-private struct StandardOutStruct: Output {
-	fileprivate func receive(_ input: String) {
-		print(input, terminator: "")
+import Foundation
+
+private struct StandardOutStruct: Output{
+	fileprivate func receive(_ data: Data) {
+		let string = String(data: data, encoding: .utf8) ?? ""
+		print(string, terminator: "")
 	}
 }
 
