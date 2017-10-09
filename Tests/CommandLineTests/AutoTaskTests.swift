@@ -39,6 +39,15 @@ class AutoTaskTests: XCTestCase {
 	
 	func testTaskChaining() {
 		var output = Data()
+		let task: AutoTask = "grep d"
+		let task2 = task | "tail -n 1"
+		let solution = "def\n"
+		"echo abc\n\(solution)abc" | task2 > output
+		XCTAssertEqual(String(bytes: output, encoding: .utf8), solution)
+	}
+	
+	func testStringToTask() {
+		var output = Data()
 		"echo abc\ndef\nabc" | "grep d" > output
 		XCTAssertEqual(String(bytes: output, encoding: .utf8), "def\n")
 	}
@@ -59,13 +68,21 @@ class AutoTaskTests: XCTestCase {
 		XCTAssertEqual(output, "\(key)=\(value)\n")
 	}
 	
+	/// A placeholder test to ensure `standardOut` compiles.
+	/// This does not actually test that it works properly :(
+	func testOutput() {
+		"echo abc" > standardOut
+	}
+	
 	static var allTests = [
 		("testArgumentCreation", testArgumentCreation),
 		("testStringCreation", testStringCreation),
 		("testListCreation", testListCreation),
 		("testTaskChainEnding", testTaskChainEnding),
 		("testTaskChaining", testTaskChaining),
+		("testStringToTask", testStringToTask),
 		("testStringOutput", testStringOutput),
-		("testSetEnv", testSetEnv)
+		("testSetEnv", testSetEnv),
+		("testOutput", testOutput)
 	]
 }

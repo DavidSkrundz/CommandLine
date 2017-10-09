@@ -69,7 +69,7 @@ extension AutoTask: ExpressibleByArrayLiteral {
 	}
 }
 
-private func >(lhs: AutoTask, rhs: (Data) -> ()) {
+private func > (lhs: AutoTask, rhs: (Data) -> Void) {
 	let pipe = Pipe()
 	lhs.tasks.last!.standardOutput = pipe
 	lhs.tasks.forEach { $0.launch() }
@@ -81,19 +81,19 @@ private func >(lhs: AutoTask, rhs: (Data) -> ()) {
 	}
 }
 
-public func >(lhs: AutoTask, rhs: Output) {
+public func > (lhs: AutoTask, rhs: Output) {
 	lhs > rhs.receive
 }
 
-public func >(lhs: AutoTask, rhs: inout Data) {
+public func > (lhs: AutoTask, rhs: inout Data) {
 	lhs > { rhs.append($0) }
 }
 
-public func >(lhs: AutoTask, rhs: inout String) {
+public func > (lhs: AutoTask, rhs: inout String) {
 	lhs > { rhs.append(String(data: $0, encoding: .utf8) ?? "") }
 }
 
-public func |(lhs: AutoTask, rhs: AutoTask) -> AutoTask {
+public func | (lhs: AutoTask, rhs: AutoTask) -> AutoTask {
 	let newPipe = Pipe()
 	lhs.tasks.last!.standardOutput = newPipe
 	rhs.tasks.first?.standardInput = newPipe
@@ -103,14 +103,14 @@ public func |(lhs: AutoTask, rhs: AutoTask) -> AutoTask {
 	return AutoTask(tasks: tasks, pipes: pipes)
 }
 
-public func |(lhs: AutoTask, rhs: String) -> AutoTask {
+public func | (lhs: AutoTask, rhs: String) -> AutoTask {
 	return lhs | AutoTask(stringLiteral: rhs)
 }
 
-public func |(lhs: String, rhs: AutoTask) -> AutoTask {
+public func | (lhs: String, rhs: AutoTask) -> AutoTask {
 	return AutoTask(stringLiteral: lhs) | rhs
 }
 
-public func |(lhs: String, rhs: String) -> AutoTask {
+public func | (lhs: String, rhs: String) -> AutoTask {
 	return AutoTask(stringLiteral: lhs) | AutoTask(stringLiteral: rhs)
 }

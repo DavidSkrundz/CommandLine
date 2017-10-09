@@ -51,3 +51,6 @@ task > output
 var output = ""
 task > output
 ```
+```Swift
+task > standardOut
+```
