@@ -27,6 +27,13 @@ public struct AutoTask {
 		self.pipes = pipes
 	}
 	
+	public init(_ string: String) {
+		self.tasks = [
+			AutoTask.createProcess(string.components(separatedBy: " "))
+		]
+		self.pipes = []
+	}
+	
 	public init(cmd: String, args: String...) {
 		self.tasks = [
 			AutoTask.createProcess([cmd] + args)
