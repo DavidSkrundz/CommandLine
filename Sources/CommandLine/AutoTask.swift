@@ -41,6 +41,13 @@ public struct AutoTask {
 		self.pipes = []
 	}
 	
+	public init(cmd: String, args: [String]) {
+		self.tasks = [
+			AutoTask.createProcess([cmd] + args)
+		]
+		self.pipes = []
+	}
+	
 	/// Synchronously run every `Process` in `self`
 	///
 	/// - Returns: The output of the last `Process`.

@@ -55,7 +55,7 @@ class AutoTaskTests: XCTestCase {
 	func testStringOutput() {
 		var output = ""
 		AutoTask("echo to") > output
-		AutoTask(cmd: "echo", args: " string!") > output
+		AutoTask(cmd: "echo", args: [" string!"]) > output
 		XCTAssertEqual(output, "to\n string!\n")
 	}
 	
