@@ -18,9 +18,14 @@ let package = Package(
 			type: .dynamic,
 			targets: ["CommandLine"])
 	],
+	dependencies: [
+		.package(url: "https://github.com/DavidSkrundz/Collections.git",
+		         .upToNextMinor(from: "1.0.0"))
+	],
 	targets: [
 		.target(
-			name: "CommandLine"),
+			name: "CommandLine",
+			dependencies: ["Generator"]),
 		.testTarget(
 			name: "CommandLineTests",
 			dependencies: ["CommandLine"])
