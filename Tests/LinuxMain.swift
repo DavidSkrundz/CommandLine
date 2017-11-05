@@ -7,6 +7,6 @@ import XCTest
 @testable import CommandLineTests
 
 XCTMain([
-	testCase(ArgumentParser.allTests),
+	testCase(ArgumentParserTests.allTests),
 	testCase(AutoTaskTests.allTests),
 ])
