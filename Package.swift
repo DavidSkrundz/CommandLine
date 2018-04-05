@@ -1,4 +1,4 @@
-// swift-tools-version:4.0
+// swift-tools-version:4.1
 //
 //  Package.swift
 //  CommandLine
@@ -11,16 +11,19 @@ let package = Package(
 	products: [
 		.library(
 			name: "CommandLine",
+			targets: ["CommandLine"]),
+		.library(
+			name: "sCommandLine",
 			type: .static,
 			targets: ["CommandLine"]),
 		.library(
-			name: "CommandLine",
+			name: "dCommandLine",
 			type: .dynamic,
 			targets: ["CommandLine"])
 	],
 	dependencies: [
 		.package(url: "https://github.com/DavidSkrundz/Collections.git",
-		         .upToNextMinor(from: "1.0.0"))
+		         .upToNextMinor(from: "1.1.0"))
 	],
 	targets: [
 		.target(

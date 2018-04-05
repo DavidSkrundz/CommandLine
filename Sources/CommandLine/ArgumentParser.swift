@@ -146,7 +146,7 @@ public class ArgumentParser {
 			var generator = args.generator()
 			while let argument = generator.next() {
 				if argument == argumentStopper {
-					let rest = generator.remainingItems()
+					let rest = generator.remaining()
 					nonOptionArguments.append(contentsOf: rest)
 					generator.advanceBy(rest.count)
 					continue
@@ -200,10 +200,10 @@ public class ArgumentParser {
 							if option.argumentCount == 0 {
 								try option.closure(closureArgs)
 							} else {
-								let remaining = String(flags.remainingItems())
+								let remaining = flags.remaining()
 								var extraArgs = option.argumentCount
 								if !remaining.isEmpty {
-									closureArgs.append(remaining)
+									closureArgs.append(String(remaining))
 									flags.advanceBy(remaining.count)
 									extraArgs -= 1
 								}
