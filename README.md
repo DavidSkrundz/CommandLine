@@ -1,5 +1,15 @@
-CommandLine [![Swift Version](https://img.shields.io/badge/Swift-4.1-orange.svg)](https://swift.org/download/#releases) [![Platforms](https://img.shields.io/badge/Platforms-macOS%20|%20Linux-lightgray.svg)](https://swift.org/download/#releases) [![Build Status](https://travis-ci.org/DavidSkrundz/CommandLine.svg?branch=master)](https://travis-ci.org/DavidSkrundz/CommandLine) [![Codebeat Status](https://codebeat.co/badges/46f0d430-fa26-401f-94d1-b95130fcf9c2)](https://codebeat.co/projects/github-com-davidskrundz-commandline) [![Codecov](https://codecov.io/gh/DavidSkrundz/CommandLine/branch/master/graph/badge.svg)](https://codecov.io/gh/DavidSkrundz/CommandLine)
-===========
+# CommandLine
+
+[![](https://img.shields.io/badge/Swift-4.2-orange.svg)][1]
+[![](https://img.shields.io/badge/os-macOS%20|%20Linux-lightgray.svg)][1]
+[![](https://travis-ci.com/DavidSkrundz/CommandLine.svg?branch=master)][2]
+[![](https://codebeat.co/badges/46f0d430-fa26-401f-94d1-b95130fcf9c2)][3]
+[![](https://codecov.io/gh/DavidSkrundz/CommandLine/branch/master/graph/badge.svg)][4]
+
+[1]: https://swift.org/download/#releases
+[2]: https://travis-ci.com/DavidSkrundz/CommandLine
+[3]: https://codebeat.co/projects/github-com-davidskrundz-commandline
+[4]: https://codecov.io/gh/DavidSkrundz/CommandLine
 
 Parse arguments and use command-line tools from Swift.
 
@@ -7,8 +17,13 @@ Parse arguments and use command-line tools from Swift.
 "ls -l" | "head -5" > standardOut
 ```
 
-ArgumentParser
---------------
+## Importing
+
+```Swift
+.package(url: "https://github.com/DavidSkrundz/CommandLine.git", .upToNextMinor(from: "1.5.0"))
+```
+
+## `ArgumentParser`
 
 Parses options from a given list of arguments. By default it uses the arguments provided to the application.
 
@@ -30,8 +45,7 @@ let usageOptions = parser.usage()
 .stringOption(short:long:description:closure:)
 ```
 
-AutoTask
---------
+## `AutoTask`
 
 A simple wrapper around `Process` that automatically pipes between AutoTasks.
 

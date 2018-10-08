@@ -12,7 +12,7 @@ internal struct Option {
 	
 	internal init(argumentCount: Int,
 	              short: Character?, long: String?,
-				  description: String,
+	              description: String,
 	              closure: @escaping ([String]) throws -> Void) {
 		self.argumentCount = argumentCount
 		self.shortFlag = short
