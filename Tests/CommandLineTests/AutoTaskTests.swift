@@ -8,7 +8,7 @@ import CommandLine
 
 import Foundation
 
-class AutoTaskTests: XCTestCase {
+final class AutoTaskTests: XCTestCase {
 	func testArgumentCreation() {
 		let string = "Some string to echo"
 		let task = AutoTask(cmd: "echo", args: string)
@@ -74,7 +74,9 @@ class AutoTaskTests: XCTestCase {
 	func testOutput() {
 		"echo abc" > standardOut
 	}
-	
+}
+
+extension AutoTaskTests: TestCase {
 	static var allTests = [
 		("testArgumentCreation", testArgumentCreation),
 		("testStringCreation", testStringCreation),
@@ -84,6 +86,6 @@ class AutoTaskTests: XCTestCase {
 		("testStringToTask", testStringToTask),
 		("testStringOutput", testStringOutput),
 		("testSetEnv", testSetEnv),
-		("testOutput", testOutput)
+		("testOutput", testOutput),
 	]
 }

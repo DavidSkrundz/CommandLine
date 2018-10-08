@@ -6,7 +6,7 @@
 import XCTest
 import CommandLine
 
-class ArgumentParserTests: XCTestCase {
+final class ArgumentParserTests: XCTestCase {
 	func testShortBool() {
 		let parser = ArgumentParser()
 		
@@ -230,7 +230,9 @@ class ArgumentParserTests: XCTestCase {
 			XCTAssertTrue(remainingArgs.isEmpty)
 		} catch let error { XCTFail("Threw Error: \(error)") }
 	}
-	
+}
+
+extension ArgumentParserTests: TestCase {
 	static var allTests = [
 		("testShortBool", testShortBool),
 		("testLongBool", testLongBool),
@@ -248,6 +250,6 @@ class ArgumentParserTests: XCTestCase {
 		("testInvalidShortFlagThrows", testInvalidShortFlagThrows),
 		("testInvalidLongFlagThrows", testInvalidLongFlagThrows),
 		("testUsage", testUsage),
-		("testDoubleOption", testDoubleOption)
+		("testDoubleOption", testDoubleOption),
 	]
 }
