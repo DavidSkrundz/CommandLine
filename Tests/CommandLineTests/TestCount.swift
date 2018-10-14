@@ -1,6 +1,6 @@
 //
 //  TestCount.swift
-//  MathTests
+//  CommandLineTests
 //
 
 import XCTest

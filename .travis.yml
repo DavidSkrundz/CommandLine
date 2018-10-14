@@ -69,7 +69,7 @@ matrix:
             -destination arch=x86_64 \
             -configuration Debug \
             -enableCodeCoverage YES \
-            test | xcpretty -tc
+            test
       after_success:
         - |
           if [[ "$TRAVIS_BRANCH" == "master" && "$TRAVIS_PULL_REQUEST" == "false" ]]
