@@ -3,10 +3,9 @@
 //  CommandLine
 //
 
-import XCTest
-@testable import CommandLineTests
+#if os(Linux)
+import SwiftGlibc.C.stdlib
+#endif
 
-XCTMain([
-	testCase(ArgumentParserTests.allTests.shuffled()),
-	testCase(AutoTaskTests.allTests.shuffled()),
-])
+print("Run the tests with `swift test --enable-test-discovery`.")
+exit(1)

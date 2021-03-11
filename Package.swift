@@ -1,4 +1,4 @@
-// swift-tools-version:4.2
+// swift-tools-version:5.0
 //
 //  Package.swift
 //  CommandLine
@@ -23,7 +23,7 @@ let package = Package(
 	],
 	dependencies: [
 		.package(url: "https://github.com/DavidSkrundz/Collections.git",
-		         .upToNextMinor(from: "1.2.0"))
+		         .upToNextMinor(from: "2.0.0"))
 	],
 	targets: [
 		.target(

@@ -231,25 +231,3 @@ final class ArgumentParserTests: XCTestCase {
 		} catch let error { XCTFail("Threw Error: \(error)") }
 	}
 }
-
-extension ArgumentParserTests: TestCase {
-	static var allTests = [
-		("testShortBool", testShortBool),
-		("testLongBool", testLongBool),
-		("testNegativeBool", testNegativeBool),
-		("testShortInt", testShortInt),
-		("testLongInt", testLongInt),
-		("testMultipleShort", testMultipleShort),
-		("testStopper", testStopper),
-		("testShortString", testShortString),
-		("testLongString", testLongString),
-		("testNonInteger", testNonInteger),
-		("testMissingArgument", testMissingArgument),
-		("testInvalidShortFlag", testInvalidShortFlag),
-		("testInvalidLongFlag", testInvalidLongFlag),
-		("testInvalidShortFlagThrows", testInvalidShortFlagThrows),
-		("testInvalidLongFlagThrows", testInvalidLongFlagThrows),
-		("testUsage", testUsage),
-		("testDoubleOption", testDoubleOption),
-	]
-}

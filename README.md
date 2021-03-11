@@ -1,6 +1,6 @@
 # CommandLine
 
-[![](https://img.shields.io/badge/Swift-4.2-orange.svg)][1]
+[![](https://img.shields.io/badge/Swift-5.0--5.3-orange.svg)][1]
 [![](https://img.shields.io/badge/os-macOS%20|%20Linux-lightgray.svg)][1]
 [![](https://travis-ci.com/DavidSkrundz/CommandLine.svg?branch=master)][2]
 [![](https://codebeat.co/badges/46f0d430-fa26-401f-94d1-b95130fcf9c2)][3]
@@ -20,10 +20,26 @@ Parse arguments and use command-line tools from Swift.
 ## Importing
 
 ```Swift
-.package(url: "https://github.com/DavidSkrundz/CommandLine.git", .upToNextMinor(from: "1.5.0"))
+import CommandLine
 ```
 
-## `ArgumentParser`
+```Swift
+dependencies: [
+	.package(url: "https://github.com/DavidSkrundz/CommandLine.git",
+	         from: "2.0.0")
+],
+targets: [
+	.target(
+		name: "",
+		dependencies: [
+			"CommandLine"
+		]),
+]
+```
+
+## Using
+
+### `ArgumentParser`
 
 Parses options from a given list of arguments. By default it uses the arguments provided to the application.
 
@@ -45,7 +61,7 @@ let usageOptions = parser.usage()
 .stringOption(short:long:description:closure:)
 ```
 
-## `AutoTask`
+### `AutoTask`
 
 A simple wrapper around `Process` that automatically pipes between AutoTasks.
 

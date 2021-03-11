@@ -75,17 +75,3 @@ final class AutoTaskTests: XCTestCase {
 		"echo abc" > standardOut
 	}
 }
-
-extension AutoTaskTests: TestCase {
-	static var allTests = [
-		("testArgumentCreation", testArgumentCreation),
-		("testStringCreation", testStringCreation),
-		("testListCreation", testListCreation),
-		("testTaskChainEnding", testTaskChainEnding),
-		("testTaskChaining", testTaskChaining),
-		("testStringToTask", testStringToTask),
-		("testStringOutput", testStringOutput),
-		("testSetEnv", testSetEnv),
-		("testOutput", testOutput),
-	]
-}
